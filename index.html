@@ -16,9 +16,8 @@
       margin: 0;
       width: 100vw;
       min-height: 100vh;
-      /* Tipografia oficial e nativa do estilo iOS (SF Pro Display / System UI) */
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-      overflow-x: hidden;
+      overflow: hidden; /* Impede qualquer barra de rolagem quando o botão se mover */
       background-color: #000000;
     }
 
@@ -46,7 +45,7 @@
       transform: scale(1.04);
     }
 
-    /* Overlay escuro de fundo (Preto puro com degradê sutil) */
+    /* Overlay escuro de fundo (Preto puro) */
     .scene-overlay {
       position: absolute;
       inset: 0;
@@ -106,7 +105,7 @@
       border-radius: 2px;
     }
 
-    /* Card estilo Notificação iOS (Glassmorphism com acabamento iOS Dark Mode) */
+    /* Card estilo Notificação iOS */
     .ios-notification-panel {
       width: 100%;
       position: relative;
@@ -169,7 +168,8 @@
       color: #ffffff;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      z-index: 100;
+      z-index: 1000;
+      transition: left 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .response-state {
@@ -236,7 +236,8 @@
     <!-- Conteúdo principal -->
     <div class="content-container">
 
-      <h1 class="title">Me desculpa Lucas 🥺</h1>
+      <!-- Título sem emoji -->
+      <h1 class="title">Me desculpa Lucas</h1>
       
       <p class="message">
         Eu sei que errei e queria te pedir desculpas de coração. Me arrependo do que aconteceu e queria ter feito diferente. Você é muito importante para mim e eu queria uma chance de consertar isso.
@@ -261,7 +262,7 @@
           <div class="response-icon" aria-hidden="true">
             <i data-lucide="heart-handshake" width="28" height="28"></i>
           </div>
-          <h2 class="response-title">❤️ Obrigado ❤️</h2>
+          <h2 class="response-title">Obrigado</h2>
           <p class="response-text">
             Eu prometo fazer o possível para merecer esse perdão!!!
           </p>
@@ -280,22 +281,24 @@
 
     let escaped = false;
 
-    // Função para o botão "NÃO" fugir mantendo-se 100% visível na tela
+    // Função ajustada que calcula rigorosamente os limites da tela do usuário
     function moveButton() {
+      const padding = 24; // Margem de segurança interna em relação à borda da tela
+      
+      const btnWidth = noBtn.getBoundingClientRect().width || 100;
+      const btnHeight = noBtn.getBoundingClientRect().height || 48;
+
       if (!escaped) {
         escaped = true;
         noBtn.style.position = "fixed";
       }
 
-      const padding = 20;
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
+      // Garante limites positivos e válidos dentro do viewport da tela
+      const maxX = Math.max(padding, window.innerWidth - btnWidth - padding);
+      const maxY = Math.max(padding, window.innerHeight - btnHeight - padding);
 
-      const maxX = window.innerWidth - btnWidth - padding;
-      const maxY = window.innerHeight - btnHeight - padding;
-
-      const x = Math.max(padding, Math.floor(Math.random() * maxX));
-      const y = Math.max(padding, Math.floor(Math.random() * maxY));
+      const x = Math.floor(Math.random() * (maxX - padding)) + padding;
+      const y = Math.floor(Math.random() * (maxY - padding)) + padding;
 
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";

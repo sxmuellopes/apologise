@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Me desculpa Lucas</title>
 
-  <!-- Fonte mais amigável -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -24,45 +24,52 @@
       justify-content: center;
       align-items: center;
 
-      /* Estampa xadrez tipo tecido */
-      background-color: #9fc3f5;
+      /* IMAGEM DE FUNDO */
+      background: url('fundo.jpg') center center / cover no-repeat;
+    }
+
+    /* Moldura xadrez azul escuro */
+    .frame {
+      padding: 16px;
+      border-radius: 34px;
+      background-color: #3b5f9c;
       background-image:
-        linear-gradient(90deg, rgba(255,255,255,0.28) 50%, transparent 50%),
-        linear-gradient(rgba(255,255,255,0.18) 50%, transparent 50%),
-        linear-gradient(90deg, rgba(74,118,180,0.12) 50%, transparent 50%),
-        linear-gradient(rgba(74,118,180,0.12) 50%, transparent 50%);
-      background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
-      background-position: 0 0, 40px 40px, 0 0, 10px 10px;
+        linear-gradient(90deg, rgba(255,255,255,0.12) 50%, transparent 50%),
+        linear-gradient(rgba(255,255,255,0.08) 50%, transparent 50%),
+        linear-gradient(90deg, rgba(18,42,84,0.22) 50%, transparent 50%),
+        linear-gradient(rgba(18,42,84,0.22) 50%, transparent 50%);
+      background-size: 60px 60px, 60px 60px, 15px 15px, 15px 15px;
+      background-position: 0 0, 30px 30px, 0 0, 8px 8px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.28);
     }
 
     .card {
       width: 90%;
       max-width: 560px;
-      background: rgba(255,255,255,0.96);
-      border-radius: 28px;
-      padding: 36px 32px;
+      background: rgba(255,255,255,0.97);
+      border-radius: 22px;
+      padding: 34px 30px;
       text-align: center;
-      box-shadow: 0 18px 40px rgba(31,41,55,0.18);
       position: relative;
       z-index: 2;
     }
 
     .emoji {
-      font-size: 56px;
-      margin-bottom: 10px;
+      font-size: 52px;
+      margin-bottom: 8px;
     }
 
     h1 {
       color: #2458b8;
-      font-size: 34px;
+      font-size: 32px;
       margin-bottom: 14px;
       font-weight: 700;
     }
 
     p {
       font-size: 16px;
-      color: #42526b;
-      line-height: 1.45;
+      color: #4a5568;
+      line-height: 1.5;
       margin-bottom: 10px;
       font-weight: 400;
     }
@@ -71,7 +78,7 @@
       margin-top: 18px;
       margin-bottom: 18px;
       color: #1f4aa8;
-      font-size: 26px;
+      font-size: 25px;
       font-weight: 600;
     }
 
@@ -109,7 +116,7 @@
       background: white;
       color: #1f4aa8;
       border: 2px solid #9ec5ff;
-      position: static; /* começa alinhado ao lado do SIM */
+      position: static;
     }
 
     #message {
@@ -133,12 +140,16 @@
     }
 
     @media (max-width: 600px) {
+      .frame {
+        padding: 12px;
+      }
+
       .card {
-        padding: 30px 22px;
+        padding: 28px 22px;
       }
 
       h1 {
-        font-size: 30px;
+        font-size: 28px;
       }
 
       p {
@@ -146,36 +157,42 @@
       }
 
       h2 {
-        font-size: 24px;
+        font-size: 22px;
       }
 
       button {
-        padding: 13px 26px;
+        padding: 13px 24px;
         font-size: 17px;
       }
     }
   </style>
+
 </head>
 
 <body>
 
-  <div class="card">
-    <div class="emoji">🥺</div>
+  <div class="frame">
+    <div class="card">
+      <div class="emoji">🥺</div>
 
-    <h1>Me desculpa Lucas</h1>
+```
+  <h1>Me desculpa Lucas</h1>
 
-    <p>Eu sei que errei e queria te pedir desculpas de coração. Me arrependo do que aconteceu e queria ter feito diferente. Você é muito importante para mim e eu queria uma chance de consertar isso.</p>
+  <p>Eu sei que errei e queria te pedir desculpas de coração. Me arrependo do que aconteceu e queria ter feito diferente. Você é muito importante para mim e eu queria uma chance de consertar isso.</p>
 
-    <h2>Você me perdoa?</h2>
+  <h2>Você me perdoa?</h2>
 
-    <div class="buttons">
-      <button id="yesBtn">SIM</button>
-      <button id="noBtn">NÃO</button>
-    </div>
+  <div class="buttons">
+    <button id="yesBtn">SIM</button>
+    <button id="noBtn">NÃO</button>
+  </div>
 
-    <div id="message">
-      Eu prometo fazer o possível para merecer esse perdão!!!
-    </div>
+  <div id="message">
+    Eu prometo fazer o possível para merecer esse perdão!!!
+  </div>
+</div>
+```
+
   </div>
 
   <script>
@@ -203,6 +220,7 @@
     }
 
     noBtn.addEventListener("mouseenter", moveButton);
+
     noBtn.addEventListener("touchstart", function(e) {
       e.preventDefault();
       moveButton();

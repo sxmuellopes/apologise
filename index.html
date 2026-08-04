@@ -1,229 +1,372 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Me desculpa Lucas</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
+    :root {
+      --ink: #102a43;
+      --wine: #245b86;
+      --rose: #d9ecfa;
+      --cream: #f5fbff;
     }
+
+    * { box-sizing: border-box; }
 
     body {
+      margin: 0;
       width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      min-height: 100vh;
+      font-family: "DM Sans", sans-serif;
+      overflow-x: hidden;
+    }
+
+    .app-shell {
       position: relative;
-    }
-
-    /* Imagem de fundo girada 90° */
-    body::before {
-      content: "";
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200vw;
-      height: 200vh;
-      background: url('8b013b8d5372443832382daa3def0ea4.jpg') center center / cover no-repeat;
-      transform: rotate(90deg);
-      z-index: -2;
-    }
-
-    /* Leve escurecimento para destacar o cartão */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 25, 60, 0.18);
-      backdrop-filter: blur(1px);
-      z-index: -1;
-    }
-
-    /* Moldura xadrez azul escuro */
-    .frame {
-      width: 90%;
-      max-width: 600px;
-      padding: 16px;
-      border-radius: 34px;
-      background-color: #2f4f8f;
-      background-image:
-        linear-gradient(90deg, rgba(255,255,255,0.16) 50%, transparent 50%),
-        linear-gradient(rgba(255,255,255,0.16) 50%, transparent 50%),
-        linear-gradient(90deg, rgba(18,42,84,0.22) 50%, transparent 50%),
-        linear-gradient(rgba(18,42,84,0.22) 50%, transparent 50%);
-      background-size: 40px 40px, 40px 40px, 10px 10px, 10px 10px;
-      background-position: 0 0, 20px 20px, 0 0, 5px 5px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.30);
-    }
-
-    .card {
       width: 100%;
-      background: rgba(255,255,255,0.97);
-      border-radius: 20px;
-      padding: 34px 30px;
-      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    /* Imagem de fundo ajustada */
+    .flower-scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.52;
+      z-index: -3;
+      transform: scale(1.04);
+    }
+
+    .scene-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(135deg, rgba(8, 30, 50, 0.94), rgba(24, 75, 112, 0.72));
+    }
+
+    .glow {
+      position: absolute;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 999px;
+      background: rgba(239, 165, 184, 0.22);
+      filter: blur(80px);
+      z-index: -1;
+      right: -12rem;
+      top: -11rem;
+    }
+
+    .phone-frame {
+      width: min(100%, 390px);
+      min-height: 680px;
       position: relative;
-      z-index: 2;
+      padding: 11px;
+      border-radius: 43px;
+      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(208,177,187,0.52));
+      box-shadow: 0 28px 80px rgba(12, 4, 8, 0.55), inset 0 1px 1px rgba(255,255,255,0.85);
+      animation: arrive 800ms cubic-bezier(.2,.8,.2,1) both;
     }
 
-    .emoji {
-      font-size: 52px;
-      margin-bottom: 8px;
+    .phone-screen {
+      min-height: 658px;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: 3.9rem 2rem 1.7rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: rgba(255, 249, 247, 0.96);
     }
 
-    h1 {
-      color: #2458b8;
-      font-size: 32px;
-      margin-bottom: 14px;
-      font-weight: 700;
+    .phone-screen::before {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      top: -100px;
+      left: -85px;
+      border-radius: 50%;
+      border: 1px solid rgba(125, 45, 71, 0.14);
+      box-shadow: 0 0 0 24px rgba(125, 45, 71, 0.035), 0 0 0 49px rgba(125, 45, 71, 0.025);
+      pointer-events: none;
     }
 
-    p {
-      font-size: 16px;
-      color: #4a5568;
-      line-height: 1.5;
-      margin-bottom: 10px;
-      font-weight: 400;
+    .speaker {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 25px;
+      border-radius: 20px;
+      background: #25151a;
     }
 
-    h2 {
-      margin-top: 18px;
-      margin-bottom: 18px;
-      color: #1f4aa8;
-      font-size: 25px;
+    .screen-content {
+      position: relative;
+      z-index: 1;
+      animation: lift 900ms 150ms cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .intro-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.48rem 0.78rem;
+      border: 1px solid rgba(36, 91, 134, 0.2);
+      border-radius: 999px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      color: #245b86;
       font-weight: 600;
     }
 
-    .buttons {
+    .title {
+      margin: 1.2rem 0 1rem;
+      font-family: "Playfair Display", serif;
+      font-size: 1.85rem;
+      line-height: 1.15;
+      color: #102a43;
+      font-weight: 600;
+    }
+
+    .message {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #4a5568;
+    }
+
+    .fine-line {
+      width: 48px;
+      height: 1px;
+      background: #245b86;
+      margin: 1.4rem 0;
+      opacity: 0.4;
+    }
+
+    .question-panel {
+      position: relative;
+      z-index: 1;
+      padding: 1.25rem 1.1rem 1.1rem;
+      border-radius: 23px;
+      border: 1px solid rgba(36, 91, 134, 0.15);
+      background: rgba(255,255,255,0.75);
+      box-shadow: 0 12px 28px rgba(16, 42, 67, 0.06);
+      backdrop-filter: blur(10px);
+    }
+
+    .question {
+      margin: 0 0 1rem;
+      font-family: "Playfair Display", serif;
+      font-size: 1.35rem;
+      color: #102a43;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .answers {
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 16px;
+      gap: 0.75rem;
       position: relative;
-      min-height: 64px;
+      min-height: 48px;
     }
 
-    button {
-      border: none;
-      cursor: pointer;
-      padding: 14px 34px;
-      font-size: 18px;
-      font-weight: 600;
+    .answer-button {
+      min-height: 48px;
+      padding: 0.75rem 1.5rem;
       border-radius: 14px;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    #yesBtn {
-      background: #2563eb;
-      color: white;
-      box-shadow: 0 8px 18px rgba(37,99,235,0.28);
-    }
-
-    #yesBtn:hover {
-      transform: scale(1.05);
-      background: #1d4ed8;
-    }
-
-    #noBtn {
-      background: white;
-      color: #1f4aa8;
-      border: 2px solid #9ec5ff;
-      position: static;
-    }
-
-    #message {
-      margin-top: 18px;
-      font-size: 18px;
-      color: #2458b8;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.95rem;
       font-weight: 600;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    #yes-action {
+      background: #245b86;
+      color: white;
+      box-shadow: 0 4px 14px rgba(36, 91, 134, 0.25);
+    }
+
+    #yes-action:hover {
+      transform: translateY(-2px);
+      background: #1a4466;
+    }
+
+    #no-action {
+      border-color: rgba(36, 91, 134, 0.3);
+      background: white;
+      color: #245b86;
+      z-index: 10;
+    }
+
+    .response-state {
       display: none;
-      animation: fadeIn 0.4s ease;
+      text-align: center;
+      padding: 0.35rem 0.15rem;
+      animation: reveal 380ms ease both;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .response-state.is-active { display: block; }
+    .question-state.is-hidden { display: none; }
+
+    .response-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 0.8rem;
+      border-radius: 18px;
+      background: rgba(217, 236, 250, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      color: #245b86;
+      box-shadow: 0 8px 24px rgba(19, 72, 111, 0.12);
     }
 
-    @media (max-width: 600px) {
-      .frame {
-        padding: 12px;
-      }
+    .response-title {
+      margin: 0 0 0.55rem;
+      font-family: "Playfair Display", serif;
+      font-size: 1.3rem;
+      color: #102a43;
+      line-height: 1.25;
+    }
 
-      .card {
-        padding: 28px 22px;
-      }
+    .response-text {
+      margin: 0 auto 0.5rem;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #4a5568;
+    }
 
-      h1 {
-        font-size: 28px;
-      }
+    .footer-note {
+      position: relative;
+      z-index: 1;
+      margin: 1rem 0 0;
+      text-align: center;
+      color: #718096;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+    }
 
-      p {
-        font-size: 15px;
-      }
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-      h2 {
-        font-size: 22px;
-      }
+    @keyframes lift {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-      button {
-        padding: 13px 24px;
-        font-size: 17px;
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 430px) {
+      .app-shell { padding: 0; }
+      .phone-frame {
+        width: 100%;
+        min-height: 100vh;
+        padding: 0;
+        border-radius: 0;
       }
+      .phone-screen {
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 4.2rem 1.6rem 1.5rem;
+      }
+      .speaker { top: 12px; }
     }
   </style>
-
 </head>
 
 <body>
 
-  <div class="frame">
-    <div class="card">
-      <div class="emoji">🥺</div>
+  <main class="app-shell" aria-label="Pedido de desculpas">
+    <!-- Fundo de tela com imagem e overlay -->
+    <img class="flower-scene" src="8b013b8d5372443832382daa3def0ea4.jpg" alt="Fundo">
+    <div class="scene-overlay" aria-hidden="true"></div>
+    <div class="glow" aria-hidden="true"></div>
 
-```
-  <h1>Me desculpa Lucas</h1>
+    <section class="phone-frame" aria-label="Mensagem de desculpas">
+      <div class="phone-screen">
+        <div class="speaker" aria-hidden="true"></div>
 
-  <p>Eu sei que errei e queria te pedir desculpas de coração. Me arrependo do que aconteceu e queria ter feito diferente. Você é muito importante para mim e eu queria uma chance de consertar isso.</p>
+        <div class="screen-content">
+          <span class="intro-tag">
+            <i data-lucide="heart" width="13" height="13" aria-hidden="true"></i> De coração
+          </span>
+          <h1 class="title">Me desculpa Lucas 🥺</h1>
+          <p class="message">
+            Eu sei que errei e queria te pedir desculpas de coração. Me arrependo do que aconteceu e queria ter feito diferente. Você é muito importante para mim e eu queria uma chance de consertar isso.
+          </p>
+          <div class="fine-line" aria-hidden="true"></div>
+        </div>
 
-  <h2>Você me perdoa?</h2>
+        <div class="question-panel">
+          <!-- Estado Inicial: Pergunta -->
+          <div id="question-state" class="question-state">
+            <h2 class="question">Você me perdoa?</h2>
+            <div class="answers">
+              <button id="yes-action" class="answer-button" type="button">SIM</button>
+              <button id="no-action" class="answer-button" type="button">NÃO</button>
+            </div>
+          </div>
 
-  <div class="buttons">
-    <button id="yesBtn">SIM</button>
-    <button id="noBtn">NÃO</button>
-  </div>
+          <!-- Estado ao Clicar SIM -->
+          <div id="yes-state" class="response-state" aria-live="polite">
+            <div class="response-icon" aria-hidden="true">
+              <i data-lucide="heart-handshake" width="28" height="28"></i>
+            </div>
+            <h2 class="response-title">❤️ Obrigado ❤️</h2>
+            <p class="response-text">
+              Eu prometo fazer o possível para merecer esse perdão!!!
+            </p>
+          </div>
+        </div>
 
-  <div id="message">
-    Eu prometo fazer o possível para merecer esse perdão!!!
-  </div>
-</div>
-```
+        <footer>
+          <p class="footer-note">Feito especialmente para você</p>
+        </footer>
 
-  </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const message = document.getElementById("message");
+    const questionState = document.getElementById("question-state");
+    const yesState = document.getElementById("yes-state");
+    const yesBtn = document.getElementById("yes-action");
+    const noBtn = document.getElementById("no-action");
 
     let escaped = false;
 
+    // Função para fazer o botão "NÃO" fugir
     function moveButton() {
       if (!escaped) {
         escaped = true;
@@ -234,24 +377,30 @@
       const maxX = window.innerWidth - noBtn.offsetWidth - margin;
       const maxY = window.innerHeight - noBtn.offsetHeight - margin;
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const x = Math.max(margin, Math.random() * maxX);
+      const y = Math.max(margin, Math.random() * maxY);
 
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
     }
 
     noBtn.addEventListener("mouseenter", moveButton);
-
     noBtn.addEventListener("touchstart", function(e) {
       e.preventDefault();
       moveButton();
     });
 
-    yesBtn.addEventListener("click", function() {
-      message.style.display = "block";
-      yesBtn.textContent = "❤️ Obrigado ❤️";
+    // Função para o botão "SIM"
+    yesBtn.addEventListener("click", () => {
+      questionState.classList.add("is-hidden");
+      yesState.classList.add("is-active");
+      if (escaped) {
+        noBtn.style.display = "none";
+      }
     });
+
+    // Inicializa os ícones do Lucide
+    lucide.createIcons();
   </script>
 
 </body>

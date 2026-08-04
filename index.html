@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Me desculpa Lucas</title>
 
   <!-- Tailwind CSS & Lucide Icons -->
@@ -12,28 +12,30 @@
   <style>
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       width: 100vw;
-      min-height: 100vh;
+      height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-      overflow: hidden; /* Impede qualquer barra de rolagem quando o botão se mover */
+      overflow: hidden; /* Bloqueia qualquer tentativa de rolagem */
       background-color: #000000;
+      touch-action: manipulation;
     }
 
     .app-shell {
       position: relative;
-      width: 100%;
-      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       isolation: isolate;
       overflow: hidden;
     }
 
-    /* Imagem de fundo apontando para lirio.jpg */
+    /* Imagem de fundo */
     .flower-scene {
       position: absolute;
       inset: 0;
@@ -45,7 +47,7 @@
       transform: scale(1.04);
     }
 
-    /* Overlay escuro de fundo (Preto puro) */
+    /* Overlay escuro de fundo */
     .scene-overlay {
       position: absolute;
       inset: 0;
@@ -53,7 +55,6 @@
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.88), rgba(15, 15, 15, 0.72));
     }
 
-    /* Brilho suave neutro ao fundo */
     .glow {
       position: absolute;
       width: 32rem;
@@ -66,7 +67,7 @@
       top: -10rem;
     }
 
-    /* Container principal centralizado */
+    /* Container principal */
     .content-container {
       width: min(100%, 440px);
       display: flex;
@@ -133,9 +134,10 @@
     .answers {
       display: flex;
       justify-content: center;
-      gap: 0.85rem;
+      align-items: center;
+      gap: 1rem;
       position: relative;
-      min-height: 48px;
+      min-height: 52px;
     }
 
     .answer-button {
@@ -147,29 +149,30 @@
       font-size: 0.95rem;
       font-weight: 600;
       letter-spacing: -0.01em;
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      user-select: none;
     }
 
     #yes-action {
       background: rgba(255, 255, 255, 0.95);
       color: #000000;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 180ms ease, background 180ms ease;
     }
 
     #yes-action:hover {
       transform: translateY(-2px);
       background: #ffffff;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     }
 
+    /* Estilo e transição do botão NÃO */
     #no-action {
       border-color: rgba(255, 255, 255, 0.25);
       background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      z-index: 1000;
-      transition: left 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 9999;
+      transition: left 0.15s ease-out, top 0.15s ease-out;
     }
 
     .response-state {
@@ -233,10 +236,8 @@
     <div class="scene-overlay" aria-hidden="true"></div>
     <div class="glow" aria-hidden="true"></div>
 
-    <!-- Conteúdo principal -->
     <div class="content-container">
 
-      <!-- Título sem emoji -->
       <h1 class="title">Me desculpa Lucas</h1>
       
       <p class="message">
@@ -245,7 +246,7 @@
 
       <div class="fine-line" aria-hidden="true"></div>
 
-      <!-- Card Notificação iOS (Vidro escuro) -->
+      <!-- Card Notificação iOS -->
       <div class="ios-notification-panel">
         
         <!-- Estado Inicial: Pergunta -->
@@ -281,34 +282,47 @@
 
     let escaped = false;
 
-    // Função ajustada que calcula rigorosamente os limites da tela do usuário
-    function moveButton() {
-      const padding = 24; // Margem de segurança interna em relação à borda da tela
-      
-      const btnWidth = noBtn.getBoundingClientRect().width || 100;
-      const btnHeight = noBtn.getBoundingClientRect().height || 48;
+    function moveButton(e) {
+      if (e) e.preventDefault();
 
+      const rect = noBtn.getBoundingClientRect();
+      const btnWidth = rect.width || 90;
+      const btnHeight = rect.height || 48;
+
+      // Se for a primeira vez, fixa o botão a partir da sua posição visual real para não "saltar"
       if (!escaped) {
-        escaped = true;
+        noBtn.style.left = rect.left + "px";
+        noBtn.style.top = rect.top + "px";
         noBtn.style.position = "fixed";
+        noBtn.style.margin = "0";
+        escaped = true;
       }
 
-      // Garante limites positivos e válidos dentro do viewport da tela
-      const maxX = Math.max(padding, window.innerWidth - btnWidth - padding);
-      const maxY = Math.max(padding, window.innerHeight - btnHeight - padding);
+      // Margem interna para o botão jamais colar nas bordas da tela
+      const margin = 20;
 
-      const x = Math.floor(Math.random() * (maxX - padding)) + padding;
-      const y = Math.floor(Math.random() * (maxY - padding)) + padding;
+      // Dimensões visíveis seguras da tela
+      const viewWidth = document.documentElement.clientWidth || window.innerWidth;
+      const viewHeight = document.documentElement.clientHeight || window.innerHeight;
 
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+      // Calcula os pontos máximos onde o botão pode ficar mantendo-se 100% visível
+      const minX = margin;
+      const minY = margin;
+      const maxX = viewWidth - btnWidth - margin;
+      const maxY = viewHeight - btnHeight - margin;
+
+      // Sorteia uma nova posição válida
+      const newX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+      const newY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+
+      // Aplica as posições com garantia de não ultrapassar limites
+      noBtn.style.left = `${Math.max(minX, Math.min(newX, maxX))}px`;
+      noBtn.style.top = `${Math.max(minY, Math.min(newY, maxY))}px`;
     }
 
-    noBtn.addEventListener("mouseenter", moveButton);
-    noBtn.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      moveButton();
-    });
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("touchstart", moveButton, { passive: false });
+    noBtn.addEventListener("click", moveButton);
 
     yesBtn.addEventListener("click", () => {
       questionState.classList.add("is-hidden");

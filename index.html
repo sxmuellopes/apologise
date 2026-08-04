@@ -131,14 +131,12 @@
       letter-spacing: -0.015em;
     }
 
-    /* Área dos botões com posicionamento relativo para travar a fuga dentro dela */
+    /* Botões perfeitamente centralizados */
     .answers {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 1rem;
-      position: relative;
-      min-height: 100px; /* Altura garantida para movimentação interna */
+      gap: 1.25rem;
       width: 100%;
     }
 
@@ -166,16 +164,17 @@
       background: #ffffff;
     }
 
-    /* O botão NÃO fica posicionado de forma absoluta DENTRO da div .answers */
+    /* Transição suave do botão NÃO pelo transform */
     #no-action {
-      position: absolute;
+      position: relative;
       border-color: rgba(255, 255, 255, 0.25);
       background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      z-index: 10;
-      transition: left 0.15s ease-out, top 0.15s ease-out;
+      z-index: 999;
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: transform;
     }
 
     .response-state {
@@ -255,7 +254,7 @@
         <!-- Estado Inicial: Pergunta -->
         <div id="question-state" class="question-state">
           <h2 class="question">Você me perdoa?</h2>
-          <div class="answers" id="answers-container">
+          <div class="answers">
             <button id="yes-action" class="answer-button" type="button">SIM</button>
             <button id="no-action" class="answer-button" type="button">NÃO</button>
           </div>
@@ -282,42 +281,36 @@
     const yesState = document.getElementById("yes-state");
     const yesBtn = document.getElementById("yes-action");
     const noBtn = document.getElementById("no-action");
-    const container = document.getElementById("answers-container");
-
-    // Posiciona o botão "NÃO" ao lado direito do "SIM" no carregamento inicial
-    function initNoButtonPosition() {
-      const yesRect = yesBtn.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      
-      const leftOffset = (yesRect.right - containerRect.left) + 16;
-      const topOffset = (yesRect.top - containerRect.top);
-      
-      noBtn.style.left = `${leftOffset}px`;
-      noBtn.style.top = `${topOffset}px`;
-    }
 
     function moveButton(e) {
       if (e) e.preventDefault();
 
-      const containerWidth = container.clientWidth;
-      const containerHeight = container.clientHeight;
-      const btnWidth = noBtn.offsetWidth || 80;
-      const btnHeight = noBtn.offsetHeight || 44;
+      const rect = noBtn.getBoundingClientRect();
+      const padding = 20;
 
-      // Limites estritos dentro do container de respostas
-      const maxX = containerWidth - btnWidth;
-      const maxY = containerHeight - btnHeight;
+      // Descobre a posição original do botão sem transformações
+      const originalX = rect.left - (parseFloat(noBtn.dataset.tx) || 0);
+      const originalY = rect.top - (parseFloat(noBtn.dataset.ty) || 0);
 
-      // Sorteia nova posição dentro da caixa do card
-      const newX = Math.max(0, Math.floor(Math.random() * maxX));
-      const newY = Math.max(0, Math.floor(Math.random() * maxY));
+      // Limites visíveis reais da janela
+      const minX = padding;
+      const minY = padding;
+      const maxX = window.innerWidth - rect.width - padding;
+      const maxY = window.innerHeight - rect.height - padding;
 
-      noBtn.style.left = `${newX}px`;
-      noBtn.style.top = `${newY}px`;
+      // Sorteia uma coordenada na tela
+      const targetX = Math.floor(Math.random() * (maxX - minX)) + minX;
+      const targetY = Math.floor(Math.random() * (maxY - minY)) + minY;
+
+      // Calcula a diferença relativa a partir da posição inicial
+      const deltaX = targetX - originalX;
+      const deltaY = targetY - originalY;
+
+      noBtn.dataset.tx = deltaX;
+      noBtn.dataset.ty = deltaY;
+
+      noBtn.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
     }
-
-    window.addEventListener("load", initNoButtonPosition);
-    window.addEventListener("resize", initNoButtonPosition);
 
     noBtn.addEventListener("mouseover", moveButton);
     noBtn.addEventListener("touchstart", moveButton, { passive: false });

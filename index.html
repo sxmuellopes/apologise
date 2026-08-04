@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Um pedido de desculpas</title>
+  <title>Me desculpa</title>
+
+  <!-- Fonte mais amigável -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Arial", sans-serif;
+      font-family: "Poppins", sans-serif;
     }
 
     body {
@@ -21,104 +24,107 @@
       justify-content: center;
       align-items: center;
 
-      /* Fundo azul xadrez */
-      background-color: #b9d7ff;
+      /* Estampa xadrez tipo tecido */
+      background-color: #9fc3f5;
       background-image:
-        linear-gradient(45deg, rgba(255,255,255,0.35) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(255,255,255,0.35) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.35) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.35) 75%);
-      background-size: 80px 80px;
-      background-position: 0 0, 0 40px, 40px -40px, -40px 0px;
+        linear-gradient(90deg, rgba(255,255,255,0.28) 50%, transparent 50%),
+        linear-gradient(rgba(255,255,255,0.18) 50%, transparent 50%),
+        linear-gradient(90deg, rgba(74,118,180,0.12) 50%, transparent 50%),
+        linear-gradient(rgba(74,118,180,0.12) 50%, transparent 50%);
+      background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+      background-position: 0 0, 40px 40px, 0 0, 10px 10px;
     }
 
     .card {
       width: 90%;
-      max-width: 650px;
-      background: white;
-      border-radius: 30px;
-      padding: 50px 40px;
+      max-width: 560px;
+      background: rgba(255,255,255,0.96);
+      border-radius: 28px;
+      padding: 36px 32px;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+      box-shadow: 0 18px 40px rgba(31,41,55,0.18);
       position: relative;
       z-index: 2;
     }
 
-    h1 {
-      color: #1d4ed8;
-      font-size: 48px;
-      margin-bottom: 25px;
+    .emoji {
+      font-size: 56px;
+      margin-bottom: 10px;
     }
 
-    .emoji {
-      font-size: 70px;
-      margin-bottom: 15px;
+    h1 {
+      color: #2458b8;
+      font-size: 34px;
+      margin-bottom: 14px;
+      font-weight: 700;
     }
 
     p {
-      font-size: 22px;
-      color: #334155;
-      line-height: 1.7;
-      margin-bottom: 18px;
+      font-size: 16px;
+      color: #42526b;
+      line-height: 1.45;
+      margin-bottom: 10px;
+      font-weight: 400;
     }
 
     h2 {
-      margin-top: 30px;
-      margin-bottom: 30px;
-      color: #1e3a8a;
-      font-size: 34px;
+      margin-top: 18px;
+      margin-bottom: 18px;
+      color: #1f4aa8;
+      font-size: 26px;
+      font-weight: 600;
     }
 
     .buttons {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      align-items: center;
+      gap: 16px;
       position: relative;
-      min-height: 80px;
+      min-height: 64px;
     }
 
     button {
       border: none;
       cursor: pointer;
-      padding: 18px 45px;
-      font-size: 24px;
-      font-weight: bold;
-      border-radius: 16px;
-      transition: 0.2s;
+      padding: 14px 34px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 14px;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
     #yesBtn {
       background: #2563eb;
       color: white;
-      box-shadow: 0 8px 20px rgba(37,99,235,0.35);
+      box-shadow: 0 8px 18px rgba(37,99,235,0.28);
     }
 
     #yesBtn:hover {
-      transform: scale(1.08);
+      transform: scale(1.05);
       background: #1d4ed8;
     }
 
     #noBtn {
       background: white;
-      color: #1e3a8a;
-      border: 2px solid #93c5fd;
-      position: fixed;
-      z-index: 9999;
+      color: #1f4aa8;
+      border: 2px solid #9ec5ff;
+      position: static; /* começa alinhado ao lado do SIM */
     }
 
     #message {
-      margin-top: 30px;
-      font-size: 26px;
-      color: #1d4ed8;
-      font-weight: bold;
+      margin-top: 18px;
+      font-size: 18px;
+      color: #2458b8;
+      font-weight: 600;
       display: none;
-      animation: aparecer 0.5s ease;
+      animation: fadeIn 0.4s ease;
     }
 
-    @keyframes aparecer {
+    @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
       }
       to {
         opacity: 1;
@@ -127,21 +133,25 @@
     }
 
     @media (max-width: 600px) {
+      .card {
+        padding: 30px 22px;
+      }
+
       h1 {
-        font-size: 36px;
+        font-size: 30px;
       }
 
       p {
-        font-size: 18px;
+        font-size: 15px;
       }
 
       h2 {
-        font-size: 28px;
+        font-size: 24px;
       }
 
       button {
-        font-size: 20px;
-        padding: 15px 30px;
+        padding: 13px 26px;
+        font-size: 17px;
       }
     }
   </style>
@@ -154,38 +164,35 @@
 
     <h1>Me desculpa...</h1>
 
-    <p>
-      Eu sei que errei, e queria te pedir desculpas de verdade.
-    </p>
-
-    <p>
-      Nada do que eu disser muda o que aconteceu, mas eu queria que você soubesse
-      que me arrependo e que você é muito importante para mim.
-    </p>
-
-    <p>
-      Se eu pudesse voltar no tempo, faria diferente.
-    </p>
+    <p>Eu sei que errei e queria te pedir desculpas de coração.</p>
+    <p>Me arrependo do que aconteceu e queria ter feito diferente.</p>
+    <p>Você é muito importante para mim e eu queria uma chance de consertar isso.</p>
 
     <h2>Você me perdoa?</h2>
 
     <div class="buttons">
       <button id="yesBtn">SIM</button>
+      <button id="noBtn">NÃO</button>
     </div>
 
     <div id="message">
-      ❤️ Eu prometo fazer o possível para merecer esse perdão.
+      ❤️ Obrigado. Eu prometo fazer o possível para merecer esse perdão.
     </div>
   </div>
-
-  <button id="noBtn">NÃO</button>
 
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
     const message = document.getElementById("message");
 
+    let escaped = false;
+
     function moveButton() {
+      if (!escaped) {
+        escaped = true;
+        noBtn.style.position = "fixed";
+      }
+
       const margin = 20;
       const maxX = window.innerWidth - noBtn.offsetWidth - margin;
       const maxY = window.innerHeight - noBtn.offsetHeight - margin;
@@ -197,13 +204,7 @@
       noBtn.style.top = y + "px";
     }
 
-    // posição inicial
-    moveButton();
-
-    // foge quando o mouse aproxima
     noBtn.addEventListener("mouseenter", moveButton);
-
-    // em celular, foge ao tocar
     noBtn.addEventListener("touchstart", function(e) {
       e.preventDefault();
       moveButton();
@@ -213,8 +214,6 @@
       message.style.display = "block";
       yesBtn.textContent = "❤️ Obrigado ❤️";
     });
-
-    window.addEventListener("resize", moveButton);
   </script>
 
 </body>

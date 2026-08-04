@@ -42,7 +42,7 @@
       overflow: hidden;
     }
 
-    /* Imagem de fundo ajustada */
+    /* Imagem de fundo apontando para lirio.jpg */
     .flower-scene {
       position: absolute;
       inset: 0;
@@ -73,7 +73,7 @@
       top: -10rem;
     }
 
-    /* Container principal centralizado (sem moldura de celular) */
+    /* Container principal centralizado */
     .content-container {
       width: min(100%, 480px);
       display: flex;
@@ -128,7 +128,7 @@
       border-radius: 2px;
     }
 
-    /* Card estilo Notificação do iOS (Glassmorphism) */
+    /* Card estilo Notificação iOS (Glassmorphism) */
     .ios-notification-panel {
       width: 100%;
       position: relative;
@@ -257,12 +257,11 @@
 <body>
 
   <main class="app-shell" aria-label="Pedido de desculpas">
-    <!-- Imagem de fundo com overlay -->
-    <img class="flower-scene" src="8b013b8d5372443832382daa3def0ea4.jpg" alt="Fundo">
+    <!-- Imagem trocada para lirio.jpg -->
+    <img class="flower-scene" src="lirio.jpg" alt="Lírio de fundo">
     <div class="scene-overlay" aria-hidden="true"></div>
     <div class="glow" aria-hidden="true"></div>
 
-    <!-- Conteúdo direto no fundo -->
     <div class="content-container">
       
       <span class="intro-tag">
@@ -277,10 +276,8 @@
 
       <div class="fine-line" aria-hidden="true"></div>
 
-      <!-- Card tipo Notificação iOS -->
       <div class="ios-notification-panel">
         
-        <!-- Estado Inicial: Pergunta -->
         <div id="question-state" class="question-state">
           <h2 class="question">Você me perdoa?</h2>
           <div class="answers">
@@ -289,7 +286,6 @@
           </div>
         </div>
 
-        <!-- Estado ao Clicar SIM -->
         <div id="yes-state" class="response-state" aria-live="polite">
           <div class="response-icon" aria-hidden="true">
             <i data-lucide="heart-handshake" width="28" height="28"></i>
@@ -317,14 +313,13 @@
 
     let escaped = false;
 
-    // Função ajustada para o botão fugir mantendo-se 100% visível na tela
     function moveButton() {
       if (!escaped) {
         escaped = true;
         noBtn.style.position = "fixed";
       }
 
-      const padding = 20; // margem de segurança da borda da tela
+      const padding = 20;
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
@@ -344,7 +339,6 @@
       moveButton();
     });
 
-    // Ação do botão "SIM"
     yesBtn.addEventListener("click", () => {
       questionState.classList.add("is-hidden");
       yesState.classList.add("is-active");
@@ -353,7 +347,6 @@
       }
     });
 
-    // Renderiza os ícones
     lucide.createIcons();
   </script>
 
